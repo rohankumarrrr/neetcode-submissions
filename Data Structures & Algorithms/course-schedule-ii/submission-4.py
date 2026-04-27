@@ -1,0 +1,32 @@
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        
+        prereqs = {c: [] for c in range(numCourses)}
+        for c, p in prerequisites:
+            prereqs[c].append(p)
+        
+        path, visited = set(), set()
+        order = []
+        
+        def dfs(c):
+            if c in path:
+                return False
+            if c in visited:
+                return True
+            
+            path.add(c)
+            visited.add(c)
+            
+            for p in prereqs[c]:
+                if not dfs(p):
+                    return False
+            
+            path.remove(c)
+            order.append(c)
+            return True
+        
+        for c in range(numCourses):
+            if not dfs(c):
+                return []
+        
+        return order
